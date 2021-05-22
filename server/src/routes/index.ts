@@ -5,6 +5,6 @@ const router: Router = Router();
 
 router.get('/urls', getUrls);
 
-router.post('/add-url', addUrl);
+router.post('/url', addUrl);
 
 export default router;
