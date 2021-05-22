@@ -1,0 +1,7 @@
+{
+  "env": {
+    "MONGO_USER": "Tudor",
+    "MONGO_PASSWORD": "T2odidOXQC2gpVrS",
+    "MONGO_DB": "urls"
+  }
+}
