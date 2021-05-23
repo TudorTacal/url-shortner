@@ -7,7 +7,7 @@ import { generateShortUrl } from '../../utils';
 
 export const getUrls = async (req: Request, res: Response): Promise<void> => {
   try {
-    const urls: Url[] = await UrlModel.find();
+    const urls: Url[] = await UrlModel.find().sort({ _id: -1 });
     res.status(200).json({ urls });
   } catch (error) {
     throw error;
@@ -27,7 +27,7 @@ export const addUrl = async (req: Request, res: Response): Promise<void> => {
       const url: Url = new UrlModel({ url: shortUrl });
 
       const newUrl: Url = await url.save();
-      const allUrls: Url[] = await UrlModel.find();
+      const allUrls: Url[] = await UrlModel.find().sort({ _id: -1 });
 
       res
         .status(201)

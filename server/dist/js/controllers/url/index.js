@@ -19,7 +19,7 @@ const url_1 = __importDefault(require("../../models/url"));
 const utils_1 = require("../../utils");
 const getUrls = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const urls = yield url_1.default.find();
+        const urls = yield url_1.default.find().sort({ _id: -1 });
         res.status(200).json({ urls });
     }
     catch (error) {
@@ -40,7 +40,7 @@ const addUrl = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             const shortUrl = utils_1.generateShortUrl();
             const url = new url_1.default({ url: shortUrl });
             const newUrl = yield url.save();
-            const allUrls = yield url_1.default.find();
+            const allUrls = yield url_1.default.find().sort({ _id: -1 });
             res
                 .status(201)
                 .json({ message: 'Url added', url: newUrl, urls: allUrls });
