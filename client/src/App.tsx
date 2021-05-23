@@ -6,10 +6,9 @@ import './App.css';
 
 function App() {
   const [input, setInput] = useState('');
-  const [url, setUrl] = useState('');
   const [urls, setUrls] = useState([]);
   const [error, setError] = useState(null);
-  useEffect(async () => {
+  useEffect(() => {
     try {
       const getUrls = async () => {
         const response = await axios.get('http://localhost:4000/urls');
@@ -28,9 +27,8 @@ function App() {
           url: input,
         }
       );
-      console.log(response.data.url.url);
-      setUrl(response.data.url.url);
       setUrls(response.data.urls);
+      setInput(response.data.url.url);
     } catch (error) {
       setError(true);
     }
@@ -38,13 +36,12 @@ function App() {
   const handleChange = useCallback((e: any) => {
     setInput(e.target.value);
   }, []);
-  console.log(urls);
   return (
     <div>
       {error && <div>Something went wrong</div>}
       <input
         type='text'
-        value={url || input}
+        value={input}
         onChange={handleChange}
         placeholder='Shorten your link'
       />

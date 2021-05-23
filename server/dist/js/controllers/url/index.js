@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addUrl = exports.getUrls = void 0;
 const url_1 = __importDefault(require("../../models/url"));
+const utils_1 = require("../../utils");
 const getUrls = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const urls = yield url_1.default.find();
@@ -27,7 +28,8 @@ exports.getUrls = getUrls;
 const addUrl = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
-        const url = new url_1.default({ url: body.url });
+        const shortUrl = utils_1.generateShortUrl();
+        const url = new url_1.default({ url: shortUrl });
         const newUrl = yield url.save();
         const allUrls = yield url_1.default.find();
         res.status(201).json({ message: 'Url added', url: newUrl, urls: allUrls });

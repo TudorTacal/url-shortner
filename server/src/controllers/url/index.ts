@@ -1,6 +1,7 @@
 import { Response, Request } from 'express';
 import { Url } from '../../types/url';
 import UrlModel from '../../models/url';
+import { generateShortUrl } from '../../utils';
 
 export const getUrls = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -14,7 +15,8 @@ export const getUrls = async (req: Request, res: Response): Promise<void> => {
 export const addUrl = async (req: Request, res: Response): Promise<void> => {
   try {
     const body = req.body as Url;
-    const url: Url = new UrlModel({ url: body.url });
+    const shortUrl = generateShortUrl();
+    const url: Url = new UrlModel({ url: shortUrl });
 
     const newUrl: Url = await url.save();
     const allUrls: Url[] = await UrlModel.find();
