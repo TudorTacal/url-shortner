@@ -13,6 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addUrl = exports.getUrls = void 0;
+// TODO: add declaration file for validate-url
+const valid_url_1 = __importDefault(require("valid-url"));
 const url_1 = __importDefault(require("../../models/url"));
 const utils_1 = require("../../utils");
 const getUrls = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -28,11 +30,21 @@ exports.getUrls = getUrls;
 const addUrl = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
-        const shortUrl = utils_1.generateShortUrl();
-        const url = new url_1.default({ url: shortUrl });
-        const newUrl = yield url.save();
-        const allUrls = yield url_1.default.find();
-        res.status(201).json({ message: 'Url added', url: newUrl, urls: allUrls });
+        if (!valid_url_1.default.isWebUri(body.url)) {
+            res.status(200).json({
+                statusCode: 400,
+                statusText: 'Unable to shorten that link. It is not a valid URL.',
+            });
+        }
+        else {
+            const shortUrl = utils_1.generateShortUrl();
+            const url = new url_1.default({ url: shortUrl });
+            const newUrl = yield url.save();
+            const allUrls = yield url_1.default.find();
+            res
+                .status(201)
+                .json({ message: 'Url added', url: newUrl, urls: allUrls });
+        }
     }
     catch (error) {
         throw error;

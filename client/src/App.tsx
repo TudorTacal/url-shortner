@@ -8,6 +8,7 @@ function App() {
   const [input, setInput] = useState('');
   const [urls, setUrls] = useState([]);
   const [error, setError] = useState(null);
+  const [invalidUrl, setInvalidUrl] = useState('');
   useEffect(() => {
     try {
       const getUrls = async () => {
@@ -27,8 +28,14 @@ function App() {
           url: input,
         }
       );
-      setUrls(response.data.urls);
-      setInput(response.data.url.url);
+      if (response.data.statusCode === 400) {
+        setInvalidUrl(response.data.statusText);
+      } else {
+        setUrls(response.data.urls);
+        setInput(response.data.url.url);
+        setInvalidUrl('');
+        setError(null);
+      }
     } catch (error) {
       setError(true);
     }
@@ -39,13 +46,18 @@ function App() {
   return (
     <div>
       {error && <div>Something went wrong</div>}
-      <input
-        type='text'
-        value={input}
-        onChange={handleChange}
-        placeholder='Shorten your link'
-      />
-      <button onClick={handleClick}>Shorten</button>
+      <div className='container'>
+        <div>
+          <input
+            type='text'
+            value={input}
+            onChange={handleChange}
+            placeholder='Shorten your link'
+          />
+          {invalidUrl && <p>{invalidUrl}</p>}
+        </div>
+        <button onClick={handleClick}>Shorten</button>
+      </div>
       <ul>
         {urls.map((url) => (
           <li>{url.url}</li>

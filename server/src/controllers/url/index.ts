@@ -1,4 +1,6 @@
 import { Response, Request } from 'express';
+// TODO: add declaration file for validate-url
+import validUrl from 'valid-url';
 import { Url } from '../../types/url';
 import UrlModel from '../../models/url';
 import { generateShortUrl } from '../../utils';
@@ -15,13 +17,22 @@ export const getUrls = async (req: Request, res: Response): Promise<void> => {
 export const addUrl = async (req: Request, res: Response): Promise<void> => {
   try {
     const body = req.body as Url;
-    const shortUrl = generateShortUrl();
-    const url: Url = new UrlModel({ url: shortUrl });
+    if (!validUrl.isWebUri(body.url)) {
+      res.status(200).json({
+        statusCode: 400,
+        statusText: 'Unable to shorten that link. It is not a valid URL.',
+      });
+    } else {
+      const shortUrl = generateShortUrl();
+      const url: Url = new UrlModel({ url: shortUrl });
 
-    const newUrl: Url = await url.save();
-    const allUrls: Url[] = await UrlModel.find();
+      const newUrl: Url = await url.save();
+      const allUrls: Url[] = await UrlModel.find();
 
-    res.status(201).json({ message: 'Url added', url: newUrl, urls: allUrls });
+      res
+        .status(201)
+        .json({ message: 'Url added', url: newUrl, urls: allUrls });
+    }
   } catch (error) {
     throw error;
   }
