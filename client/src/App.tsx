@@ -1,18 +1,18 @@
 // @ts-nocheck
 // type everything :)
-import { useState, useCallback, useEffect } from "react";
-import axios from "axios";
-import "./App.css";
+import { useState, useCallback, useEffect } from 'react';
+import axios from 'axios';
+import './App.css';
 
 function App() {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [urls, setUrls] = useState([]);
   const [error, setError] = useState(null);
-  const [invalidUrl, setInvalidUrl] = useState("");
+  const [invalidUrl, setInvalidUrl] = useState('');
   useEffect(() => {
     try {
       const getUrls = async () => {
-        const response = await axios.get("http://localhost:4000/urls");
+        const response = await axios.get('http://localhost:4000/urls');
         setUrls(response.data.urls);
       };
       getUrls();
@@ -25,7 +25,7 @@ function App() {
       e.preventDefault();
       try {
         const response = await axios.post<{ url: string }>(
-          "http://localhost:4000/url",
+          'http://localhost:4000/url',
           {
             url: input,
           }
@@ -35,7 +35,7 @@ function App() {
         } else {
           setUrls(response.data.urls);
           setInput(response.data.url.url);
-          setInvalidUrl("");
+          setInvalidUrl('');
           setError(null);
         }
       } catch (error) {
@@ -48,10 +48,10 @@ function App() {
     setInput(e.target.value);
   }, []);
   return (
-    <div class='container'>
+    <div className='container'>
       {error && <div>Something went wrong</div>}
       <section className='form-section'>
-        <form onSubmit={handleSubmit} class='form'>
+        <form onSubmit={handleSubmit} className='form'>
           <fieldset className='fieldset'>
             <input
               className='shorten-url'
@@ -67,9 +67,9 @@ function App() {
         </form>
       </section>
       <section className='list-section'>
-        <ul class='list'>
+        <ul className='list'>
           {urls.map((url) => (
-            <li>{url.url}</li>
+            <li key={url.id}>{url.url}</li>
           ))}
         </ul>
       </section>
