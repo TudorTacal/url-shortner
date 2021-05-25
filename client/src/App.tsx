@@ -24,17 +24,17 @@ function App() {
     async (e) => {
       e.preventDefault();
       try {
-        const response = await axios.post<{ url: string }>(
+        const response = await axios.post<{ longUrl: string }>(
           'http://localhost:4000/url',
           {
-            url: input,
+            longUrl: input,
           }
         );
         if (response.data.statusCode === 400) {
           setInvalidUrl(response.data.statusText);
         } else {
           setUrls(response.data.urls);
-          setInput(response.data.url.url);
+          setInput(response.data.url.shortUrl);
           setInvalidUrl('');
           setError(null);
         }
@@ -69,7 +69,7 @@ function App() {
       <section className='list-section'>
         <ul className='list'>
           {urls.map((url) => (
-            <li key={url.id}>{url.url}</li>
+            <li key={url.id}>{url.shortUrl}</li>
           ))}
         </ul>
       </section>

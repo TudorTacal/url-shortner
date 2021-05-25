@@ -1,5 +1,6 @@
 import { Document } from 'mongoose';
 
 export interface Url extends Document {
-  url: string;
+  longUrl: string;
+  shortUrl: string;
 }

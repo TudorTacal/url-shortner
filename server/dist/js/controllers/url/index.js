@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addUrl = exports.getUrls = void 0;
-// TODO: add declaration file for validate-url
 const valid_url_1 = __importDefault(require("valid-url"));
 const url_1 = __importDefault(require("../../models/url"));
 const utils_1 = require("../../utils");
@@ -29,8 +28,8 @@ const getUrls = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getUrls = getUrls;
 const addUrl = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const body = req.body;
-        if (!valid_url_1.default.isWebUri(body.url)) {
+        const { body: { longUrl }, } = req;
+        if (!valid_url_1.default.isWebUri(longUrl)) {
             res.status(200).json({
                 statusCode: 400,
                 statusText: 'Unable to shorten that link. It is not a valid URL.',
@@ -38,16 +37,14 @@ const addUrl = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         else {
             const shortUrl = utils_1.generateShortUrl();
-            const url = new url_1.default({ url: shortUrl });
+            const url = new url_1.default({ longUrl, shortUrl });
             const newUrl = yield url.save();
-            const allUrls = yield url_1.default.find().sort({ _id: -1 });
-            res
-                .status(201)
-                .json({ message: 'Url added', url: newUrl, urls: allUrls });
+            const urls = yield url_1.default.find().sort({ _id: -1 });
+            res.status(201).json({ message: 'Url added', url: newUrl, urls });
         }
     }
     catch (error) {
-        throw error;
+        res.status(500).json({ message: error.message });
     }
 });
 exports.addUrl = addUrl;

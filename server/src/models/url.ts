@@ -2,9 +2,12 @@ import { Url } from '../types/url';
 import { model, Schema } from 'mongoose';
 
 const UrlSchema: Schema = new Schema({
-  url: {
+  longUrl: {
     type: String,
     required: true,
+  },
+  shortUrl: {
+    type: String,
   },
 });
 
