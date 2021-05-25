@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { getUrls, addUrl } from '../controllers/url';
+import { getUrls, postUrl } from '../controllers/url';
 
 const router: Router = Router();
 
 router.get('/urls', getUrls);
 
-router.post('/url', addUrl);
+router.post('/url', postUrl);
 
 export default router;

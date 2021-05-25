@@ -9,11 +9,11 @@ export const getUrls = async (req: Request, res: Response): Promise<void> => {
     const urls: Url[] = await UrlModel.find().sort({ _id: -1 });
     res.status(200).json({ urls });
   } catch (error) {
-    throw error;
+    res.status(500).json({ message: error.message });
   }
 };
 
-export const addUrl = async (req: Request, res: Response): Promise<void> => {
+export const postUrl = async (req: Request, res: Response): Promise<void> => {
   try {
     const {
       body: { longUrl },
