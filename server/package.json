@@ -37,11 +37,16 @@
   },
   "jest": {
     "preset": "ts-jest",
+    "testPathIgnorePatterns": [
+      "<rootDir>/dist/",
+      "<rootDir>/node_modules/"
+    ],
     "testEnvironment": "node",
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!**/node_modules/**",
-      "!**/vendor/**"
+      "!**/vendor/**",
+      "!**/dist/**"
     ],
     "globals": {
       "MONGO_USER": "Tudor",

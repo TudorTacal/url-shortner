@@ -76,7 +76,6 @@ describe('Url controller', () => {
       const res = await request(server).post('/url').send({
         longUrl: testUrl,
       });
-      // console.log(res.body.url.shortUrl); => https://pbid.io/test-hash
       expect(res.status).toEqual(201);
       expect(res.body.message).toEqual('Url added');
       expect(res.body.url.longUrl).toEqual(testUrl);
