@@ -1,12 +1,13 @@
-import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 import { server } from './server';
-// TODO: install dotenv over nodemon json
+import mongoose from 'mongoose';
+
+dotenv.config();
 const PORT: string | number = process.env.PORT || 4000;
 
 const uri: string = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.vztwr.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
 const options = { useNewUrlParser: true, useUnifiedTopology: true };
 mongoose.set('useFindAndModify', false);
-
 mongoose.connect(uri, options);
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

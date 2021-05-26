@@ -10,5 +10,6 @@ export const generateShortUrl = (
   protocol = PROTOCOL,
   nanoid = NANOID()
 ) => {
+  console.log(nanoid, 'nanoid');
   return `${protocol}://${domain}/${nanoid}`;
 };

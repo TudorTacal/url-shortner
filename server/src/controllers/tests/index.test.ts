@@ -4,13 +4,26 @@ import { server } from '../../server';
 import UrlModel from '../../models/url';
 import { Url } from '../../types/url';
 
+declare global {
+  namespace NodeJS {
+    interface Global {
+      document: Document;
+      window: Window;
+      navigator: Navigator;
+      MONGO_USER: string;
+      MONGO_PASSWORD: string;
+      MONGO_DB: string;
+    }
+  }
+}
+
 jest.mock('nanoid', () => ({
   customAlphabet: jest.fn().mockReturnValue(() => 'test-hash'),
 }));
-const databaseName = 'test';
-describe('Routes', () => {
+
+describe('Url controller', () => {
   beforeAll(async () => {
-    const uri: string = `mongodb+srv://Tudor:T2odidOXQC2gpVrS@cluster0.vztwr.mongodb.net/${databaseName}?retryWrites=true&w=majority`;
+    const uri: string = `mongodb+srv://${global.MONGO_USER}:${global.MONGO_PASSWORD}@cluster0.vztwr.mongodb.net/${global.MONGO_DB}?retryWrites=true&w=majority`;
     const options = { useNewUrlParser: true, useUnifiedTopology: true };
     mongoose.set('useFindAndModify', false);
     await mongoose.connect(uri, options);
@@ -18,6 +31,7 @@ describe('Routes', () => {
   afterEach(async () => {
     await UrlModel.deleteMany();
     jest.restoreAllMocks();
+    jest.resetAllMocks();
   });
   afterAll(async () => {
     await mongoose.connection.close();
@@ -62,6 +76,7 @@ describe('Routes', () => {
       const res = await request(server).post('/url').send({
         longUrl: testUrl,
       });
+      // console.log(res.body.url.shortUrl); => https://pbid.io/test-hash
       expect(res.status).toEqual(201);
       expect(res.body.message).toEqual('Url added');
       expect(res.body.url.longUrl).toEqual(testUrl);
