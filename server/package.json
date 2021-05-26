@@ -18,7 +18,7 @@
     "build": "tsc",
     "start": "concurrently \"tsc -w\" \"nodemon dist/js/app.js\"",
     "test": "jest",
-    "test:watch": "jest --watch --coverage"
+    "test:watch": "jest --watchAll --coverage --no-cache"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",

@@ -1,30 +1,36 @@
-// @ts-nocheck
-// type everything :)
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, FC } from 'react';
 import axios from 'axios';
+import { UrlResponse, Url, UrlsResponse } from './types';
 import './App.css';
 
-function App() {
-  const [input, setInput] = useState('');
-  const [urls, setUrls] = useState([]);
-  const [error, setError] = useState(null);
-  const [invalidUrl, setInvalidUrl] = useState('');
+const App: FC = () => {
+  const [loading, setLoading] = useState(false);
+  const [input, setInput] = useState<string>('');
+  const [urls, setUrls] = useState<Url[]>([]);
+  const [error, setError] = useState(false);
+  const [invalidUrl, setInvalidUrl] = useState<string | undefined>();
   useEffect(() => {
-    try {
-      const getUrls = async () => {
-        const response = await axios.get('http://localhost:4000/urls');
+    const getUrls = async () => {
+      setLoading(true);
+      setError(false);
+      try {
+        const response: UrlsResponse = await axios.get(
+          'http://localhost:4000/urls'
+        );
         setUrls(response.data.urls);
-      };
-      getUrls();
-    } catch (e) {
-      setError(true);
-    }
+      } catch (e) {
+        setError(true);
+      }
+      setLoading(false);
+    };
+    getUrls();
   }, []);
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
+      setError(false);
       try {
-        const response = await axios.post<{ longUrl: string }>(
+        const response: UrlResponse = await axios.post(
           'http://localhost:4000/url',
           {
             longUrl: input,
@@ -34,9 +40,8 @@ function App() {
           setInvalidUrl(response.data.statusText);
         } else {
           setUrls(response.data.urls);
-          setInput(response.data.url.shortUrl);
+          setInput(response.data?.url.shortUrl);
           setInvalidUrl('');
-          setError(null);
         }
       } catch (error) {
         setError(true);
@@ -67,14 +72,15 @@ function App() {
         </form>
       </section>
       <section className='list-section'>
+        {loading && <div>Fetching urls...</div>}
         <ul className='list'>
           {urls.map((url) => (
-            <li key={url.id}>{url.shortUrl}</li>
+            <li key={url._id}>{url.shortUrl}</li>
           ))}
         </ul>
       </section>
     </div>
   );
-}
+};
 
 export default App;

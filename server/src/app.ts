@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { server } from './server';
-
+// TODO: install dotenv over nodemon json
 const PORT: string | number = process.env.PORT || 4000;
 
 const uri: string = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.vztwr.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
