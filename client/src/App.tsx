@@ -40,7 +40,7 @@ const App: FC = () => {
           setInvalidUrl(response.data.statusText);
         } else {
           setUrls(response.data.urls);
-          setInput(response.data?.url.shortUrl);
+          setInput(response.data.url.shortUrl);
           setInvalidUrl('');
         }
       } catch (error) {
