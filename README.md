@@ -24,12 +24,12 @@ Please set node version to v12.16.1
 - clone the repo
 
 Create a `.env` file at the root of the `server` package file with the following variables.
-You can use my credentials for MongoDB Atlas cluster (for a limited time) or add your own credentials pointing to a different cluster.
+You need to define credentials for the MongoDB Atlas cluster.
 
 ```
-MONGO_USER=Tudor
-MONGO_PASSWORD=T2odidOXQC2gpVrS
-MONGO_DB=urls
+MONGO_USER=
+MONGO_PASSWORD=
+MONGO_DB=
 ```
 
 **Option 1** (with Docker - you must have docker installed locally)
